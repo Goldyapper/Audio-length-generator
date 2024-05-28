@@ -1,5 +1,6 @@
 from mutagen.mp3 import MP3
 import os
+import glob
 # function to convert the information into 
 # some readable format 
 def audio_duration(file_path): 
@@ -16,4 +17,7 @@ def audio_duration(file_path):
 		mins += 1
 	return name, mins # returns the duration 
 
-print(audio_duration("E16 - Chase the Night.mp3"))
+mypath = ("C:/Users/adama/Downloads/Big Finish Productions/*/*/*/*")
+
+print(glob.glob(mypath))
+
