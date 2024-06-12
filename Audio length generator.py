@@ -3,11 +3,18 @@ import os
 import glob
 # function to convert the information into 
 # some readable format 
-def audio_duration(file_path): 
-	
+def file_name(file_path):
 	file_name = os.path.basename(file_path)
 	file = os.path.splitext(file_name)
 	name = file [0]# returns the name of the file
+	
+	return name
+
+
+
+def audio_duration(file_path): 
+	
+	name = file_name(file_path)
 
 	audio = MP3(file_path)
 	audio_info = audio.info 
@@ -24,7 +31,7 @@ mypath = ("C:/Users/adama/Downloads/Big Finish Productions/*")
 everyitem = (glob.glob(mypath))
 while True:
 	for item in everyitem:
-		print(item)
+		#print(item)
 		if ".mp3" in item :
 			print (audio_duration(item))
 			
@@ -33,5 +40,11 @@ while True:
 			#print ('false ' + item)
 			mypath+=("/*")
 			everyitem = glob.glob(mypath)
+			
+			if ".mp3" not in item:
+				try: 
+					print (audio_duration(item))
+				except:	
+					print(item)
 			#print (everyitem)
 
