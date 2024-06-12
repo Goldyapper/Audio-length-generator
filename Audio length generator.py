@@ -4,7 +4,7 @@ import glob
 from openpyxl import load_workbook
 
 spreadsheet= "audio time spreadsheet.xlsx"
-
+mypath = ("C:/Users/adama/Downloads/Big Finish Productions/*")
 
 # function to convert the information into 
 # some readable format 
@@ -35,9 +35,6 @@ def addtospreadsheet(new_data):
 		work_sheet.append(row)
 	
 	work_book.save(spreadsheet)
-
-
-mypath = ("C:/Users/adama/Downloads/Big Finish Productions/*")
 
 everyitem = (glob.glob(mypath))
 while True:
