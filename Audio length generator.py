@@ -41,7 +41,6 @@ everyitem = (glob.glob(mypath))
 
 while True:
 	for item in everyitem:
-		#print(item)
 		if ".mp3" in item :
 			addtospreadsheet([audio_duration(item)])#get name and time of mp3 files and add to sheet	
 		else:
@@ -56,4 +55,3 @@ while True:
 						addtospreadsheet(new_data)
 				except:	
 					break
-
