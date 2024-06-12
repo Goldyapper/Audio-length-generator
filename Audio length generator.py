@@ -37,6 +37,8 @@ def addtospreadsheet(new_data):
 	work_book.save(spreadsheet)
 
 everyitem = (glob.glob(mypath))
+
+
 while True:
 	for item in everyitem:
 		#print(item)
