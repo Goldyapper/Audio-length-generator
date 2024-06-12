@@ -17,7 +17,19 @@ def audio_duration(file_path):
 		mins += 1
 	return name, mins # returns the duration 
 
-mypath = ("C:/Users/adama/Downloads/Big Finish Productions/*/*/*/*")
+print(audio_duration("C:/Users/adama/Downloads/Big Finish Productions/1. Doctor Who/5. Bernice Summerfield/2. Bernice Summerfield Audiobooks (BSAB)/BSAB 1.0X - Treasury.mp3"))
 
-print(glob.glob(mypath))
+mypath = ("C:/Users/adama/Downloads/Big Finish Productions/*")
+
+everyitem = (glob.glob(mypath))
+while True:
+	for item in everyitem:
+		if ".mp3" in item :
+			print ( )
+
+		else:
+			#print ('false ' + item)
+			mypath+=("/*")
+			everyitem = glob.glob(mypath)
+			#print (everyitem)
 
