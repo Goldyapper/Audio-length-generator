@@ -43,7 +43,7 @@ while True:
 			
 			if ".mp3" not in item:
 				try: 
-					print (audio_duration(item))
+					print (file_name(item))
 				except:	
 					print(item)
 			#print (everyitem)
