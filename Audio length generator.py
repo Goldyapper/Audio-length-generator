@@ -40,14 +40,16 @@ everyitem = (glob.glob(mypath))
 
 
 while True:
-	for item in everyitem:
-		if ".mp3" in item :
-			addtospreadsheet([audio_duration(item)])#get name and time of mp3 files and add to sheet	
-		else:
-			mypath+=("/*")
-			everyitem = glob.glob(mypath)
-			
-			if ".mp3" not in item:
+	everyitem = (glob.glob(mypath))
+
+	if "mp3" not in everyitem[0]:
+		mypath+=("/*")
+		everyitem = glob.glob(mypath)
+	else:
+		for item in everyitem:
+			if ".mp3" in item:
+				addtospreadsheet([audio_duration(item)])#get name and time of mp3 files and add to sheet	
+			else:
 				try: 
 					data_to_add = (file_name(item))
 					if data_to_add.isnumeric() == False:
@@ -55,3 +57,5 @@ while True:
 						addtospreadsheet(new_data)
 				except:	
 					break
+		mypath+=("/*")
+		everyitem = glob.glob(mypath)
