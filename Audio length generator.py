@@ -1,6 +1,7 @@
 from mutagen.mp3 import MP3
 import os
 import glob
+import re
 from openpyxl import load_workbook
 
 spreadsheet= "audio time spreadsheet.xlsx"
@@ -9,10 +10,11 @@ mypath = ("C:/Users/adama/Downloads/Big Finish Productions/*")
 # function to convert the information into 
 # some readable format 
 def file_name(file_path):
+	#print(file_path)
 	file_name = os.path.basename(file_path)
 	file = os.path.splitext(file_name)
 	name = file [0]# returns the name of the file
-	
+	name = re.sub(r'^.*? - ', '', name)
 	return name
 
 def audio_duration(file_path): 
