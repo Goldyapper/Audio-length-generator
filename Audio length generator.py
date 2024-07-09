@@ -2,6 +2,7 @@ from mutagen.mp3 import MP3
 import os
 import glob
 import re
+from tinytag import TinyTag 
 from openpyxl import load_workbook
 
 spreadsheet= "audio time spreadsheet.xlsx"
@@ -10,16 +11,19 @@ mypath = ("C:/Users/adama/Downloads/Big Finish Productions/*")
 # function to convert the information into 
 # some readable format 
 def file_name(file_path):
-	#print(file_path)
+	
 	file_name = os.path.basename(file_path)
 	file = os.path.splitext(file_name)
 	name = file [0]# returns the name of the file
 	name = re.sub(r'^.*? - ', '', name)
+
 	return name
 
 def audio_duration(file_path): 
 	
 	name = file_name(file_path)
+
+	tinytag_audio = TinyTag.get(file_path)
 
 	audio = MP3(file_path)
 	audio_info = audio.info 
@@ -27,7 +31,11 @@ def audio_duration(file_path):
 	mins = length // 60 # calculate in minutes 
 	if length > 0:
 		mins += 1
-	return [name, mins] # returns the duration 
+	
+	year = tinytag_audio.year
+	track = (tinytag_audio.track)
+	
+	return [name,track, mins, year] # returns the name and duration 
 
 def addtospreadsheet(new_data):
 	work_book = load_workbook(spreadsheet)
@@ -50,6 +58,7 @@ while True:
 	else:
 		for item in everyitem:
 			if ".mp3" in item:
+				print(audio_duration(item))
 				addtospreadsheet([audio_duration(item)])#get name and time of mp3 files and add to sheet	
 			else:
 				try: 
