@@ -6,8 +6,8 @@ from tinytag import TinyTag
 from openpyxl import load_workbook
 
 spreadsheet= "audio time spreadsheet.xlsx"
-#mypath = ("C:/Users/adama/Downloads/Big Finish Productions/*")
-mypath = ("C:/Users/adama/Downloads/Big Finish - Doctor Who - 2022")
+mypath = ("C:/Users/adama/Downloads/Big Finish Productions/*")
+
 # function to convert the information into 
 # some readable format 
 def file_name(file_path):
