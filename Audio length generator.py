@@ -6,8 +6,8 @@ from tinytag import TinyTag
 from openpyxl import load_workbook
 
 spreadsheet= "audio time spreadsheet.xlsx"
-mypath = ("C:/Users/adama/Downloads/Big Finish Productions/*")
-
+#mypath = ("C:/Users/adama/Downloads/Big Finish Productions/*")
+mypath = ("C:/Users/adama/Downloads/Big Finish - Doctor Who - 2022")
 # function to convert the information into 
 # some readable format 
 def file_name(file_path):
@@ -35,7 +35,7 @@ def audio_duration(file_path):
 	year = tinytag_audio.year
 	track = (tinytag_audio.track)
 	
-	return [name,track, mins, year] # returns the name and duration 
+	return [name,'','','','',track,'', mins,'','','','','','', year] # returns the name and duration 
 
 def addtospreadsheet(new_data):
 	work_book = load_workbook(spreadsheet)
