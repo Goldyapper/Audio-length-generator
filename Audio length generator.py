@@ -6,7 +6,7 @@ from tinytag import TinyTag
 from openpyxl import load_workbook
 
 spreadsheet= "audio time spreadsheet.xlsx"
-mypath = ("C:/Users/adama/Downloads/3. March/*")
+mypath = ("C:/Users/adama/Downloads/Big Finish - Doctor Who - 2022/*")
 # function to convert the information into 
 # some readable format 
 def file_name(file_path):
@@ -14,11 +14,11 @@ def file_name(file_path):
 	file_name = os.path.basename(file_path)
 	file = os.path.splitext(file_name)
 	name = file [0]# returns the name of the file
-	name = re.sub(r'^.*? - ', '', name)
+	name = re.sub(r'^.*? -' , '', name).lstrip()
 
 	return name
 
-def audio_duration(file_path): 
+def audio_data(file_path): 
 	
 	name = file_name(file_path)
 
@@ -56,8 +56,8 @@ while True:
 	else:
 		for item in everyitem:
 			if ".mp3" in item:
-				print(audio_duration(item))
-				addtospreadsheet([audio_duration(item)])#get name and time of mp3 files and add to sheet	
+				print(audio_data(item))
+				addtospreadsheet([audio_data(item)])#get name and time of mp3 files and add to sheet	
 			else:
 				try: 
 					data_to_add = (file_name(item))
