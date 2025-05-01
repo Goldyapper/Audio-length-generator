@@ -22,7 +22,7 @@ def file_name(file_path):
 
 def fetch_data(url):
     # URL of the website to fetch data from
-    url = "https://tardis.wiki/wiki/Rosa_(TV_story)"
+    url = "https://tardis.wiki/wiki/The_Five_Doctors_(TV_story)"
 
     try:
         # Send a GET request to the website
@@ -62,8 +62,13 @@ def fetch_data(url):
                 values = item.select('div.pi-data-value a')
                 enemy = [e.text for e in values]
 
-            #Writer Retrival
-            if label and 'Writers' in label.text:
+            #Writers Retrival
+            if label and 'Writers'  in label.text:
+                values = item.select('div.pi-data-value a')
+                writer = [w.text for w in values]
+
+			#Writer Retrival
+            if label and 'Writer'  in label.text:
                 values = item.select('div.pi-data-value a')
                 writer = [w.text for w in values]
 
@@ -77,20 +82,41 @@ def fetch_data(url):
     except requests.exceptions.RequestException as e:
         print(f"An error occurred: {e}")
 
-def doctor_text_converter(text):
-	doctor =''
-	if text == 'Thirteenth Doctor':
-		doctor = "13th Dr"
-
-	return doctor
+def doctorconverter(doctor,featuring):
+	doctor_number_map = {
+	'Fugitive Doctor': 'Fugutive Dr',
+    'First Doctor': '1st Dr',
+    'Second Doctor': '2nd Dr',
+    'Third Doctor': '3rd Dr',
+    'Fourth Doctor': '4th Dr',
+    'Fifth Doctor': '5th Dr',
+    'Sixth Doctor': '6th Dr',
+    'Seventh Doctor': '7th Dr',
+    'Eighth Doctor': '8th Dr',
+    'War Doctor': 'War Dr',
+    'Ninth Doctor': '9th Dr',
+    'Tenth Doctor': '10th Dr',
+    'Eleventh Doctor': '11th Dr',
+    'Twelfth Doctor': '12th Dr',
+    'Thirteenth Doctor': '13th Dr',
+    'Fourteenth Doctor': '14th Dr',
+    'Fifteenth Doctor': '15th Dr'
+}
+	for doctors in doctor:
+		doctor = [doctor_number_map.get(d, d) for d in doctor]
+	
+	for doctors in featuring:
+		featuring = [doctor_number_map.get(d, d) for d in featuring]
+	
+	return doctor,featuring
 
 def audio_data(file_path): 
 	
 	name = file_name(file_path)
 
 	parts,doctor,companions,featuring,enemy,writer,director = fetch_data("a")
-	
-	doctor_text_converter(doctor)
+
+	doctor,featuring = doctorconverter(doctor,featuring)
 
 	tinytag_audio = TinyTag.get(file_path)
 	audio = MP3(file_path)
