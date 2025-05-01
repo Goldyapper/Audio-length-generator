@@ -20,21 +20,23 @@ def file_name(file_path):
 
 	return name
 
-def fetch_data(url):
+def fetch_data(name):
     # URL of the website to fetch data from
-    url = "https://tardis.wiki/wiki/The_Five_Doctors_(TV_story)"
+    url = "https://tardis.wiki/wiki/" + name + "_(audio_story)"
 
     try:
+		
         # Send a GET request to the website
         response = requests.get(url)
         response.raise_for_status()  # Raise an error for bad status codes
 
         # Access the content of the response
         soup = BeautifulSoup(response.text, 'html.parser')
-
+        parts = doctor = main_character = companions = featuring = enemy = writer = director = ''
+		
         for item in soup.select('div.pi-item'): # a for loop that runs through at elements in the table
             label = item.select_one('h3.pi-data-label')
-
+            #print(label)
             #Parts Data retrival
             if label and 'Number of parts:' in label.text:
                 value = item.select_one('div.pi-data-value')
@@ -45,8 +47,12 @@ def fetch_data(url):
             if label and 'Doctor:' in label.text:
                 values = item.select('div.pi-data-value a')
                 doctor = [d.text for d in values]
+				
+            #Main character Data retrival
+            if label and 'Main character(s):' in label.text:
+                values = item.select('div.pi-data-value a')
+                main_character = [m.text for m in values]
 
-            
             #companion retrival    
             if label and 'Companion(s):' in label.text:
                 values = item.select('div.pi-data-value a')
@@ -77,7 +83,7 @@ def fetch_data(url):
                 values = item.select('div.pi-data-value a')
                 director = [d.text for d in values]
         
-        return parts,doctor,companions,featuring,enemy,writer,director
+        return parts,doctor,main_character,companions,featuring,enemy,writer,director
 
     except requests.exceptions.RequestException as e:
         print(f"An error occurred: {e}")
@@ -114,8 +120,8 @@ def audio_data(file_path):
 	
 	name = file_name(file_path)
 
-	parts,doctor,companions,featuring,enemy,writer,director = fetch_data("a")
-
+	parts,doctor,main_character,companions,featuring,enemy,writer,director = fetch_data(name)
+    
 	doctor,featuring = doctorconverter(doctor,featuring)
 
 	tinytag_audio = TinyTag.get(file_path)
@@ -125,14 +131,15 @@ def audio_data(file_path):
 	mins = length // 60 # calculate in minutes 
 	if length > 0:
 		mins += 1
-	
+	if doctor == '':
+		doctor = main_character
+		
 	year = tinytag_audio.year
 	track = (tinytag_audio.track)
 	
 	data = [name,'','','','',track,parts, mins,doctor,companions,featuring,enemy,writer,director,year]
-	audio_data = [", ".join(item) if isinstance(item, list) else item for item in data]
-	
-	return audio_data # returns the data cleaned up 
+	audio_data= [", ".join(item) if isinstance(item, list) else item for item in data]
+	return audio_data
 
 def addtospreadsheet(new_data):
 	work_book = load_workbook(spreadsheet)
