@@ -32,7 +32,7 @@ def fetch_data(name):
 
         # Access the content of the response
         soup = BeautifulSoup(response.text, 'html.parser')
-        parts = doctor = main_character = companions = featuring = enemy = writer = director = ''
+        season = parts = doctor = main_character = companions = featuring = enemy = writer = director = ''
 		
         for item in soup.select('div.pi-item'): # a for loop that runs through at elements in the table
             label = item.select_one('h3.pi-data-label')
@@ -62,35 +62,41 @@ def fetch_data(name):
             if label and 'Featuring' in label.text:
                 values = item.select('div.pi-data-value a')
                 featuring = [f.text for f in values]
-
+			
             #Enemy retrival
             if label and 'Main enemy' in label.text:
                 values = item.select('div.pi-data-value a')
                 enemy = [e.text for e in values]
-
+			
             #Writers Retrival
             if label and 'Writers'  in label.text:
                 values = item.select('div.pi-data-value a')
                 writer = [w.text for w in values]
-
+			
 			#Writer Retrival
             if label and 'Writer'  in label.text:
                 values = item.select('div.pi-data-value a')
                 writer = [w.text for w in values]
-
+			
             #Director Retrival
             if label and 'Director' in label.text:
                 values = item.select('div.pi-data-value a')
                 director = [d.text for d in values]
+			
+            #Season Retrival
+            if label and 'Part of' in label.text:
+                values = item.select('div.pi-data-value a')
+                season = [s.text for s in values]
+				
         
-        if parts and doctor and main_character and companions and featuring and enemy and writer and director == '':
+        if season and parts and doctor and main_character and companions and featuring and enemy and writer and director == '':
             return KeyError
         else:
-            return parts,doctor,main_character,companions,featuring,enemy,writer,director
+            return season, parts,doctor,main_character,companions,featuring,enemy,writer,director
 
     except requests.exceptions.RequestException as e:
-        print(f"An error occurred: {e}")
-        return ('N/A', 'N/A', 'N/A', 'N/A', 'N/A', 'N/A', 'N/A', 'N/A')  # Return a default tuple
+        #print(f"An error occurred: {e}")
+        return ('N/A',)*9  # Return a default tuple
 	
 def doctorconverter(doctor,featuring):
 	doctor_number_map = {
@@ -125,7 +131,7 @@ def audio_data(file_path):
 	name = file_name(file_path)
 	#print(name)
 
-	parts,doctor,main_character,companions,featuring,enemy,writer,director = fetch_data(name)
+	season,parts,doctor,main_character,companions,featuring,enemy,writer,director = fetch_data(name)
     
 	doctor,featuring = doctorconverter(doctor,featuring)
 
@@ -142,7 +148,7 @@ def audio_data(file_path):
 	year = tinytag_audio.year
 	track = (tinytag_audio.track)
 	
-	data = [name,'','','','',track,parts, mins,doctor,companions,featuring,enemy,writer,director,year]
+	data = [name,'','','',season,track,parts, mins,doctor,companions,featuring,enemy,writer,director,year]
 	audio_data= [", ".join(item) if isinstance(item, list) else item for item in data]
 	return audio_data
 
