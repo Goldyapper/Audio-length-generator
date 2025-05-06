@@ -8,7 +8,7 @@ import requests
 from bs4 import BeautifulSoup
 
 spreadsheet= "audio time spreadsheet.xlsx"
-mypath = ("C:/Users/adama/Downloads/Big Finish - Doctor Who - 2022/*")
+mypath = ("C:/Users/adama/Downloads/4. April*")
 # function to convert the information into 
 # some readable format 
 def file_name(file_path):
@@ -83,11 +83,15 @@ def fetch_data(name):
                 values = item.select('div.pi-data-value a')
                 director = [d.text for d in values]
         
-        return parts,doctor,main_character,companions,featuring,enemy,writer,director
+        if parts and doctor and main_character and companions and featuring and enemy and writer and director == '':
+            return KeyError
+        else:
+            return parts,doctor,main_character,companions,featuring,enemy,writer,director
 
     except requests.exceptions.RequestException as e:
         print(f"An error occurred: {e}")
-
+        return ('N/A', 'N/A', 'N/A', 'N/A', 'N/A', 'N/A', 'N/A', 'N/A')  # Return a default tuple
+	
 def doctorconverter(doctor,featuring):
 	doctor_number_map = {
 	'Fugitive Doctor': 'Fugutive Dr',
@@ -119,6 +123,7 @@ def doctorconverter(doctor,featuring):
 def audio_data(file_path): 
 	
 	name = file_name(file_path)
+	#print(name)
 
 	parts,doctor,main_character,companions,featuring,enemy,writer,director = fetch_data(name)
     
