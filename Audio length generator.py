@@ -89,14 +89,16 @@ def fetch_data(name):
                 season = [s.text for s in values]
 				
         
-        if season and parts and doctor and main_character and companions and featuring and enemy and writer and director == '':
-            return KeyError
+        if not all([season, parts, doctor, main_character, companions, featuring, enemy, writer, director]):
+            return (['N/A'], 'N/A', ['N/A'], ['N/A'], ['N/A'], ['N/A'], ['N/A'], ['N/A'], ['N/A'])
+
         else:
             return season, parts,doctor,main_character,companions,featuring,enemy,writer,director
 
     except requests.exceptions.RequestException as e:
         #print(f"An error occurred: {e}")
-        return ('N/A',)*9  # Return a default tuple
+        return (['N/A'], 'N/A', ['N/A'], ['N/A'], ['N/A'], ['N/A'], ['N/A'], ['N/A'], ['N/A'])
+        # Return a default tuple
 	
 def doctorconverter(doctor,featuring):
 	doctor_number_map = {
@@ -149,7 +151,8 @@ def audio_data(file_path):
 	track = (tinytag_audio.track)
 	
 	data = [name,'','','',season,track,parts, mins,doctor,companions,featuring,enemy,writer,director,year]
-	audio_data= [", ".join(item) if isinstance(item, list) else item for item in data]
+	audio_data = [", ".join(item) if isinstance(item, list) and not isinstance(item, str) else item for item in data]
+
 	return audio_data
 
 def addtospreadsheet(new_data):
@@ -164,24 +167,13 @@ def addtospreadsheet(new_data):
 everyitem = (glob.glob(mypath))
 
 
-while True:
-	everyitem = (glob.glob(mypath))
+# Main process
+mp3_files = glob.glob(mypath + "/**/*.mp3", recursive=True)
 
-	if "mp3" not in everyitem[0]:
-		mypath+=("/*")
-		everyitem = glob.glob(mypath)
-	else:
-		for item in everyitem:
-			if ".mp3" in item:
-				print(audio_data(item))
-				addtospreadsheet([audio_data(item)])#get name and time of mp3 files and add to sheet	
-			else:
-				try: 
-					data_to_add = (file_name(item))
-					if data_to_add.isnumeric() == False:
-						new_data = [[data_to_add,"N/A"]]
-						addtospreadsheet(new_data)
-				except:	
-					break
-		mypath+=("/*")
-		everyitem = glob.glob(mypath)
+for file_path in mp3_files:
+	try:
+		data = audio_data(file_path)
+		print(data)
+		addtospreadsheet([data])
+	except Exception as e:
+		print(f"Failed to process {file_path}: {e}")
