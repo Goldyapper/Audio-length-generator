@@ -89,16 +89,16 @@ def fetch_data(name):
                 season = [s.text for s in values]
 				
         
-        if not all([season, parts, doctor, main_character, companions, featuring, enemy, writer, director]):
-            return (['N/A'], 'N/A', ['N/A'], ['N/A'], ['N/A'], ['N/A'], ['N/A'], ['N/A'], ['N/A'])
+        if season and parts and doctor and main_character and companions and featuring and enemy and writer and director == '':
+            return KeyError
 
         else:
             return season, parts,doctor,main_character,companions,featuring,enemy,writer,director
 
     except requests.exceptions.RequestException as e:
         #print(f"An error occurred: {e}")
-        return (['N/A'], 'N/A', ['N/A'], ['N/A'], ['N/A'], ['N/A'], ['N/A'], ['N/A'], ['N/A'])
-        # Return a default tuple
+        return ('N/A',)*9  # Return a default tuple
+
 	
 def doctorconverter(doctor,featuring):
 	doctor_number_map = {
