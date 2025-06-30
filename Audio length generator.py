@@ -8,7 +8,7 @@ import requests
 from bs4 import BeautifulSoup
 
 spreadsheet= "audio time spreadsheet.xlsx"
-mypath = ("C:/Users/adama/Downloads/4. April*")
+mypath = (r"C:\Users\adama\Documents\Coding stuff\Audio-length-generator\input")
 # function to convert the information into 
 # some readable format 
 def file_name(file_path):
